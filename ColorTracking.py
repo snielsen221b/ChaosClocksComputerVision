@@ -1,6 +1,5 @@
 # code from https://pastebin.com/WVhfmphS
 
-import
 from collections import deque
 import numpy as np
 import argparse
