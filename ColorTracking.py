@@ -7,11 +7,20 @@ import imutils
 import cv2
 import urllib #for reading image from URL
 
-#TODO: Webcam stuff (grab video from Webcam)
+# construct the argument parse and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video",
+    help="path to the (optional) video file")
+ap.add_argument("-b", "--buffer", type=int, default=64,
+    help="max buffer size")
+args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color
 lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'yellow':(23, 59, 119)}
 upper = {'red':(186,255,255), 'green':(86,255,255), 'yellow':(54,255,255)}
+
+# define standard colors for circle around the object
+colors = {'red':(0,0,255), 'green':(0,255,0), 'yellow':(0, 255, 217)}
 
 # if a video path was not supplied, grab the reference
 # to the webcam
