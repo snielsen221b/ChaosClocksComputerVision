@@ -16,11 +16,11 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color
-lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'yellow':(23, 59, 119)}
-upper = {'red':(186,255,255), 'green':(86,255,255), 'yellow':(54,255,255)}
+lower = {'red':(166, 84, 141), 'green':(50, 100, 90), 'yellow':(23, 59, 119), 'blue':(97, 100, 117)}
+upper = {'red':(186,255,255), 'green':(86,255,255), 'yellow':(54,255,255), 'blue':(117,255,255)}
 
 # define standard colors for circle around the object
-colors = {'red':(0,0,255), 'green':(0,255,0), 'yellow':(0, 255, 217)}
+colors = {'red':(0,0,255), 'green':(0,255,0), 'yellow':(0, 255, 217), 'blue':(255,0,0),}
 
 # if a video path was not supplied, grab the reference
 # to the webcam
