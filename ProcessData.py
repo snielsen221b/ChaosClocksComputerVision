@@ -1,8 +1,9 @@
 import pickle
 import matplotlib.pyplot as plt
+import math
 
 # open data
-fp =  open("test.txt", "r")
+fp =  open("one_pendulum_test2.txt", "r")
 data = pickle.load(fp)
 
 # pagackes data as ditionary {color: time, x, y}
@@ -28,7 +29,7 @@ for i in data:
     organized_data[color] = {'t': t_list, 'x': x_list, 'y': y_list}
 
 
-def calculate_angle(data, color1, color2):
+def calculate_angles(data, color1, color2, tolerence):
     t1_list = data[color1]['t']
     t2_list = data[color2]['t']
     x1_list = data[color1]['x']
@@ -36,7 +37,38 @@ def calculate_angle(data, color1, color2):
     y1_list = data[color1]['y']
     y2_list = data[color2]['y']
 
+    t_theta_list = []
+    theta_list = []
 
-plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
-plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
+    print(t1_list)
+    print(t2_list)
+    for t1 in t1_list:
+        index = t1_list.index(t1)
+        if index < len(t2_list):
+            if (abs(t2_list[index] - t1)) < tolerence:
+                x1 = x1_list[index]
+                x2 = x2_list[index]
+                y1 = y1_list[index]
+                y2 = y2_list[index]
+                theta = calculate_angle(x1, x2, y1, y2)
+
+                t_theta_list.append(t1)
+                theta_list.append(theta)
+    return t_theta_list, theta_list
+
+def calculate_angle(x1, x2, y1, y2):
+    y = y1 - y2
+    x = x2 - x1
+    theta = 0
+    if y:
+        theta = math.atan(x/y)
+    return theta
+
+print(organized_data['yellow']['t'])
+theta_data = calculate_angles(organized_data, 'yellow', 'blue', .001)
+print(theta_data)
+plt.plot(theta_data[0], theta_data[1])
+#plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
+#plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
+
 plt.show()

@@ -97,7 +97,7 @@ while True:
 
                     centers.append([key, center, t])
                     # save centers data in test.txt file
-                    with open("test.txt", "wb") as fp:
+                    with open("test3.txt", "wb") as fp:
                         pickle.dump(centers, fp)
                     print(centers)
 
