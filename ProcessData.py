@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("one_pendulum_test2.txt", "r")
+fp =  open("one_pendulum_test_1.txt", "r")
 data = pickle.load(fp)
 
 # pagackes data as ditionary {color: time, x, y}
@@ -46,6 +46,7 @@ def calculate_angles(data, color1, color2, tolerence):
         index = t1_list.index(t1)
         if index < len(t2_list):
             if (abs(t2_list[index] - t1)) < tolerence:
+        #if t1 in t2_list:
                 x1 = x1_list[index]
                 x2 = x2_list[index]
                 y1 = y1_list[index]
@@ -64,11 +65,12 @@ def calculate_angle(x1, x2, y1, y2):
         theta = math.atan(x/y)
     return theta
 
-print(organized_data['yellow']['t'])
-theta_data = calculate_angles(organized_data, 'yellow', 'blue', .001)
-print(theta_data)
-plt.plot(theta_data[0], theta_data[1])
-#plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
+#print(organized_data['blue']['t'])
+#theta_data = calculate_angles(organized_data, 'yellow', 'blue', 5)
+#print(theta_data)
+#plt.plot(theta_data[0], theta_data[1])
+
+plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
 
 plt.show()
