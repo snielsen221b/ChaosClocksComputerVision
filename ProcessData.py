@@ -1,3 +1,4 @@
+from __future__ import division
 import pickle
 import matplotlib.pyplot as plt
 import math
@@ -69,12 +70,15 @@ def calculate_angle(x1, x2, y1, y2):
     theta = 0
     if y:
         theta = math.atan(x/y)
+    print(x,y,x/y, theta)
     return theta
 
 # print(organized_data['blue']['t'])
 theta_data = calculate_angles(organized_data, 'yellow', 'blue', .01)
 # print(theta_data[0])
 plt.plot(theta_data[0], theta_data[1])
+plt.ylabel("Theta")
+plt.xlabel('Time (s)')
 
 # plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
