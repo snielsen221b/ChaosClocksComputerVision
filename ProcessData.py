@@ -1,3 +1,4 @@
+from __future__ import division
 import pickle
 import matplotlib.pyplot as plt
 import math
@@ -42,25 +43,31 @@ def calculate_angles(data, color1, color2, tolerence):
     t_theta_list = []
     theta_list = []
 
+
     # print(t1_list);
     # print(t2_list);
     for t1 in t1_list:
+        diff = t1_list[-1]
         # if index < len(t2_list):
-        found = False
+        # found = False
         for t2 in t2_list:
-            if (abs(t2 - t1)) < tolerence and not found:
-        #if t1 in t2_list:
-                index2 = t2_list.index(t2)
-                index1 = t1_list.index(t1)
-                x1 = x1_list[index1]
-                x2 = x2_list[index2]
-                y1 = y1_list[index1]
-                y2 = y2_list[index2]
-                theta = calculate_angle(x1, x2, y1, y2)
+            # if (abs(t2 - t1)) < tolerence and not found:
+            if (abs(t2-t1))<diff:
+                diff =  abs(t2-t1)
+                t2_closest = t2
 
-                t_theta_list.append(t1)
-                theta_list.append(theta)
-                found = True;
+        #if t1 in t2_list:
+        index2 = t2_list.index(t2_closest)
+        index1 = t1_list.index(t1)
+        x1 = x1_list[index1]
+        x2 = x2_list[index2]
+        y1 = y1_list[index1]
+        y2 = y2_list[index2]
+        theta = calculate_angle(x1, x2, y1, y2)
+
+        t_theta_list.append(t1)
+        theta_list.append(theta)
+                # found = True;
     return t_theta_list, theta_list
 
 def calculate_angle(x1, x2, y1, y2):
@@ -69,12 +76,15 @@ def calculate_angle(x1, x2, y1, y2):
     theta = 0
     if y:
         theta = math.atan(x/y)
+    print(x,y,x/y, theta)
     return theta
 
 # print(organized_data['blue']['t'])
-theta_data = calculate_angles(organized_data, 'yellow', 'blue', .01)
+theta_data = calculate_angles(organized_data, 'yellow', 'blue', .02)
 # print(theta_data[0])
 plt.plot(theta_data[0], theta_data[1])
+plt.ylabel("Theta (rad)")
+plt.xlabel('Time (s)')
 
 # plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
