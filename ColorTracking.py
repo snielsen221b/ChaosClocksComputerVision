@@ -23,11 +23,11 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'blue':(97, 100, 117),'yellow':(23, 140, 119)} #assign new item lower['blue'] = (93, 10, 0)
-upper = {'blue':(117,255,255),'yellow':(54,255,255)}
+lower = {'blue':(97, 100, 117),'yellow':(23, 140, 119), 'red':(73, 124, 113),'green':(40, 90, 90)} #assign new item lower['blue'] = (93, 10, 0)
+upper = {'blue':(117,255,255),'yellow':(54,255,255),'red':(186, 255, 255),'green':(86,255,255)}
 
 # define standard colors for circle around the object
-colors = {'blue':(255,0,0),'yellow':(0, 200, 217)}
+colors = {'blue':(255,0,0),'yellow':(0, 200, 217),'red':(0,0,255),'green':(0, 255, 0)}
 
 #Tracking center and time in an array
 
