@@ -4,6 +4,7 @@
 #https://www.pyimagesearch.com/2015/09/21/opencv-track-object-movement/
 
 # import the necessary packages
+from __future__ import division
 from collections import deque
 import numpy as np
 import argparse
@@ -33,6 +34,10 @@ colors = {'blue':(255,0,0),'yellow':(0, 200, 217),'red':(0,0,255),'green':(0, 25
 
 centers = []
 
+#Initialize time counting
+
+frameno = -1
+fps = 60
 #pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -53,6 +58,9 @@ while True:
     if args.get("video") and not grabbed:
         break
 
+    # Add frame count, time for each frame
+    frameno = frameno + 1
+    t = frameno*1/60
     # resize the frame, blur it, and convert it to the HSV
     # color space
     frame = imutils.resize(frame, width=600)
@@ -84,7 +92,7 @@ while True:
                 c = max(cnts, key=cv2.contourArea)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
                 M = cv2.moments(c)
-                t = time.clock()
+                # t = time.clock()
 
                 # only proceed if the radius meets a minimum size. Correct this value for your obect's size
                 if radius > 0.5:
