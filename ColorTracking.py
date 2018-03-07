@@ -87,7 +87,7 @@ while True:
                 t = time.clock()
 
                 # only proceed if the radius meets a minimum size. Correct this value for your obect's size
-                if radius > 0.5:
+                if radius > 0.001:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius), colors[key], 2)
@@ -97,7 +97,7 @@ while True:
 
                     centers.append([key, center, t])
                     # save centers data in test.txt file
-                    with open("test3.txt", "wb") as fp:
+                    with open("two_pendulums_test1.txt", "wb") as fp:
                         pickle.dump(centers, fp)
                     print(centers)
 

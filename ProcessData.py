@@ -30,7 +30,7 @@ for i in data:
     organized_data[color] = {'t': t_list, 'x': x_list, 'y': y_list}
 
 
-def calculate_angles(data, color1, color2, tolerence):
+def calculate_angles(data, color1, color2):
     t1_list = data[color1]['t']
     t2_list = data[color2]['t']
     x1_list = data[color1]['x']
@@ -86,7 +86,7 @@ plt.plot(theta_data[0], theta_data[1])
 plt.ylabel("Theta (rad)")
 plt.xlabel('Time (s)')
 
-# plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
+#plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
 
 plt.show()
