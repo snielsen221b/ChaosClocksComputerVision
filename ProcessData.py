@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("one_pendulum_test2.txt", "r")
+fp =  open("test3.txt", "r")
 data = pickle.load(fp)
+print(data)
 
 # pagackes data as ditionary {color: time, x, y}
 organized_data = {'red': {'t': [], 'x': [], 'y': []}, 'green': {'t': [], 'x': [],
@@ -76,7 +77,7 @@ def calculate_angle(x1, x2, y1, y2):
     theta = 0
     if y:
         theta = math.atan(x/y)
-    print(x,y,x/y, theta)
+    # print(x,y,x/y, theta)
     return theta
 
 # print(organized_data['blue']['t'])

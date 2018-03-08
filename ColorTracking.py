@@ -24,8 +24,8 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'blue':(97, 100, 117),'yellow':(23, 140, 119), 'red':(73, 124, 113),'green':(40, 90, 90)} #assign new item lower['blue'] = (93, 10, 0)
-upper = {'blue':(117,255,255),'yellow':(54,255,255),'red':(186, 255, 255),'green':(86,255,255)}
+lower = {'blue':(100, 110, 50),'yellow':(23, 140, 119), 'red':(0, 60, 90),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
+upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 180),'green':(86,255,255)}
 
 # define standard colors for circle around the object
 colors = {'blue':(255,0,0),'yellow':(0, 200, 217),'red':(0,0,255),'green':(0, 255, 0)}
@@ -49,13 +49,21 @@ if not args.get("video", False):
 # otherwise, grab a reference to the video file
 else:
     camera = cv2.VideoCapture(args["video"])
+# for i in range(50):
+#     (grabbed, frame) = camera.read()
+#     cv2.imshow("Frame",frame)
+#     cv2.waitKey(1)
 # keep looping
 while True:
     # grab the current frame
     (grabbed, frame) = camera.read()
+
     # if we are viewing a video and we did not grab a frame,
     # then we have reached the end of the video
     if args.get("video") and not grabbed:
+        with open("test3.txt", "wb") as fp:
+            pickle.dump(centers, fp)
+        print(centers)
         break
 
     # Add frame count, time for each frame
@@ -67,15 +75,19 @@ while True:
 
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
     #for each color in dictionary check object in frame
     for key, value in upper.items():
         # construct a mask for the color from dictionary`1, then perform
         # a series of dilations and erosions to remove any small
         # blobs left in the mask
-        kernel = np.ones((9,9),np.uint8)
+        kernel = np.ones((6,6),np.uint8)
         mask = cv2.inRange(hsv, lower[key], upper[key])
+        # cv2.imshow("Mask",mask)
+        # waiting = cv2.waitKey() & 0xFF
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
 
         # find contours in the mask and initialize the current
         # (x, y) center of the ball
@@ -95,7 +107,7 @@ while True:
                 # t = time.clock()
 
                 # only proceed if the radius meets a minimum size. Correct this value for your obect's size
-                if radius > 0.5:
+                if radius > 0.3:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius), colors[key], 2)
@@ -105,22 +117,26 @@ while True:
 
                     centers.append([key, center, t])
                     # save centers data in test.txt file
-                    with open("test3.txt", "wb") as fp:
-                        pickle.dump(centers, fp)
-                    print(centers)
+                    # with open("test3.txt", "wb") as fp:
+                    #     pickle.dump(centers, fp)
+                    # print(centers[-1])
 
 
     # for w in centers[i,:]:
     #     print(w)
-
 
     # show the frame to our screen
     cv2.imshow("Frame", frame)
 
     key = cv2.waitKey(1) & 0xFF
 
+    if key == ord("s"):
+        cv2.imwrite("testframe.png",hsv)
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
+        with open("test3.txt", "wb") as fp:
+            pickle.dump(centers, fp)
+        print(centers)
         break
 
 # cleanup the camera and close any open windows
