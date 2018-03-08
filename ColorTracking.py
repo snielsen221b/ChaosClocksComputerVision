@@ -24,8 +24,10 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'blue':(100, 110, 50),'yellow':(23, 140, 119), 'red':(0, 60, 90),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
-upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 180),'green':(86,255,255)}
+lower = {'blue':(100, 110, 50),'yellow':(23, 200, 200), 'red':(0, 60, 90),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
+upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 255),'green':(86,255,255)}
+
+#For one video, red v max 180.  Had to change for another video
 
 # define standard colors for circle around the object
 colors = {'blue':(255,0,0),'yellow':(0, 200, 217),'red':(0,0,255),'green':(0, 255, 0)}

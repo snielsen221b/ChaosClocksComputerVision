@@ -81,11 +81,14 @@ def calculate_angle(x1, x2, y1, y2):
     return theta
 
 # print(organized_data['blue']['t'])
-theta_data = calculate_angles(organized_data, 'yellow', 'blue', .02)
+theta_data1 = calculate_angles(organized_data, 'yellow', 'blue', .02)
+theta_data2 = calculate_angles(organized_data, 'green', 'red', .02)
 # print(theta_data[0])
-plt.plot(theta_data[0], theta_data[1])
+plt.plot(theta_data1[0], theta_data1[1])
+plt.plot(theta_data2[0], theta_data2[1])
 plt.ylabel("Theta (rad)")
 plt.xlabel('Time (s)')
+plt.title('Double Pendulum')
 
 # plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
