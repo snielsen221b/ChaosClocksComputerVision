@@ -24,8 +24,9 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'blue':(100, 110, 50),'yellow':(23, 200, 130), 'red':(0, 60, 90),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
+lower = {'blue':(100, 110, 50),'yellow':(23, 200, 110), 'red':(0, 200, 50),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
 upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 255),'green':(86,255,255)}
+
 
 #For one video, red v max 180.  Had to change for another video
 
@@ -36,10 +37,7 @@ colors = {'blue':(255,0,0),'yellow':(0, 200, 217),'red':(0,0,255),'green':(0, 25
 
 centers = []
 
-#Initialize time counting
 
-frameno = -1
-fps = 60
 #pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -55,27 +53,34 @@ else:
 #     (grabbed, frame) = camera.read()
 #     cv2.imshow("Frame",frame)
 #     cv2.waitKey(1)
+
+#Initialize time counting
+
+frameno = -1
+fps = camera.get(cv2.cv.CV_CAP_PROP_FPS)
+print(fps)
+# fps = camera.set(cv2.cv.CV_CAP_PROP_FPS,240)
 # keep looping
 while True:
     # grab the current frame
     (grabbed, frame) = camera.read()
-
+    
     # if we are viewing a video and we did not grab a frame,
     # then we have reached the end of the video
     if args.get("video") and not grabbed:
         with open("BaseMovementUncommon.txt", "wb") as fp:
             pickle.dump(centers, fp)
-        print(centers)
+        # print(centers)
         break
 
     # Add frame count, time for each frame
     frameno = frameno + 1
-    t = frameno*1/60
+    t = frameno*1/fps
     # resize the frame, blur it, and convert it to the HSV
     # color space
     frame = imutils.resize(frame, width=600)
 
-    blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+    blurred = cv2.GaussianBlur(frame, (11, 11), 0) #Increases time a bit
     hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
     #for each color in dictionary check object in frame
@@ -85,7 +90,8 @@ while True:
         # blobs left in the mask
         kernel = np.ones((6,6),np.uint8)
         mask = cv2.inRange(hsv, lower[key], upper[key])
-        # cv2.imshow("Mask",mask)
+        if key == "red":
+            cv2.imshow("Mask",mask)
         # waiting = cv2.waitKey() & 0xFF
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
@@ -119,26 +125,27 @@ while True:
 
                     centers.append([key, center, t])
                     # save centers data in test.txt file
-                    with open("two_pendulums_test1.txt", "wb") as fp:
-                        pickle.dump(centers, fp)
-                    print(centers)
+                    # with open("test3.txt", "wb") as fp:
+                    #     pickle.dump(centers, fp)
+                    # print(centers[-1])
 
-
+    
     # for w in centers[i,:]:
     #     print(w)
 
     # show the frame to our screen
     cv2.imshow("Frame", frame)
-
     key = cv2.waitKey(1) & 0xFF
-
     if key == ord("s"):
         cv2.imwrite("testframe.png",hsv)
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
-        with open("test3.txt", "wb") as fp:
+        with open("noescape.txt", "wb") as fp:
             pickle.dump(centers, fp)
-        print(centers)
+        # print(centers)
+        break
+    if key == ord("e"):
+        # print(centers)
         break
 
 # cleanup the camera and close any open windows
