@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("BaseMovementUncommon.txt", "r")
+fp =  open("SinglePendWithAndWithout.txt", "r")
 data = pickle.load(fp)
 # print(data)
 
@@ -50,26 +50,26 @@ def calculate_angles(data, color1, color2):
     # print(t1_list);
     # print(t2_list);
     for t1 in t1_list:
-        diff = t1_list[-1]
+        # diff = t1_list[-1]
         # if index < len(t2_list):
         # found = False
-        for t2 in t2_list:
-            # if (abs(t2 - t1)) < tolerence and not found:
-            if (abs(t2-t1))<diff:
-                diff =  abs(t2-t1)
-                t2_closest = t2
+        if t1 in t2_list:
+            # # if (abs(t2 - t1)) < tolerence and not found:
+            # if t2 == t1:
+            #     # diff =  abs(t2-t1)
+            #     break
 
         #if t1 in t2_list:
-        index2 = t2_list.index(t2_closest)
-        index1 = t1_list.index(t1)
-        x1 = x1_list[index1]
-        x2 = x2_list[index2]
-        y1 = y1_list[index1]
-        y2 = y2_list[index2]
-        theta = calculate_angle(x1, x2, y1, y2)
+            index2 = t2_list.index(t1)
+            index1 = t1_list.index(t1)
+            x1 = x1_list[index1]
+            x2 = x2_list[index2]
+            y1 = y1_list[index1]
+            y2 = y2_list[index2]
+            theta = calculate_angle(x1, x2, y1, y2)
 
-        t_theta_list.append(t1)
-        theta_list.append(theta)
+            t_theta_list.append(t1)
+            theta_list. append(theta)
                 # found = True;
     return t_theta_list, theta_list
 
@@ -79,7 +79,7 @@ def calculate_angle(x1, x2, y1, y2):
     theta = 0
     if y:
         theta = math.atan(x/y)
-    # print(x,y,x/y, theta)
+    print(theta)
     return theta
 
 def calculate_cart(dist, data, color1,color2):
@@ -140,15 +140,17 @@ def calculate_cart(dist, data, color1,color2):
     return t1_list, cart_pos
 
 # print(organized_data['blue']['t'])
-theta_data1 = calculate_angles(organized_data, 'yellow', 'blue', .02)
-theta_data2 = calculate_angles(organized_data, 'green', 'red', .02)
+theta_data1 = calculate_angles(organized_data, 'yellow', 'blue')
+theta_data2 = calculate_angles(organized_data, 'green', 'red')
+
 # print(theta_data[0])
-plt.figure(1)
-plt.plot(theta_data1[0], theta_data1[1])
-plt.plot(theta_data2[0], theta_data2[1])
+fig1 = plt.figure(1)
+plt.plot(theta_data1[0], theta_data1[1], label = 'With Escapement')
+plt.plot(theta_data2[0], theta_data2[1], label = 'Without Escapement')
 plt.ylabel("Theta (rad)")
 plt.xlabel('Time (s)')
 plt.title('Double Pendulum')
+plt.legend(['With Escapement','Without Escapement'])
 
 #plt.plot(organized_data['yellow']['x'], organized_data['yellow']['y'], 'y')
 #plt.plot(organized_data['blue']['x'], organized_data['blue']['y'], 'b')
@@ -164,3 +166,9 @@ plt.xlabel('Time (s)')
 plt.title('Cart on Double Pendulum')
 
 plt.show()
+
+with open("singlependsWITHesc1angles.txt", "wb") as fp:
+    pickle.dump(theta_data1, fp)
+    
+with open("singlependWOesc1angles.txt", "wb") as fp:
+    pickle.dump(theta_data2, fp)
