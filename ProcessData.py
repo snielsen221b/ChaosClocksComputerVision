@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("DSC_0004.txt", "r")
+fp =  open("DSC_0008.txt", "r")
 data = pickle.load(fp)
 # print(data)
 
