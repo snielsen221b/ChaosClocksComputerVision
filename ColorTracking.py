@@ -21,12 +21,16 @@ ap.add_argument("-v", "--video",
     help="path to the (optional) video file")
 ap.add_argument("-b", "--buffer", type=int, default=64,
     help="max buffer size")
+ap.add_argument("-p", "--picklename", type=str, default="testing.txt",
+    help="data save name, ends in .txt")
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'blue':(100, 110, 50),'yellow':(23, 200, 110), 'red':(0, 200, 50),'green':(40, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
-upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 255),'green':(86,255,255)}
+lower = {'blue':(100, 70, 50),'yellow':(18, 180, 130), 'red':(0, 170, 50),'green':(30, 90, 30)} #assign new item lower['blue'] = (93, 10, 0)
+upper = {'blue':(110,255,255),'yellow':(54,255,255),'red':(15, 255, 255),'green':(86,220,255)}
 
+# 19, 192, 114
+# 25, 232,188
 
 #For one video, red v max 180.  Had to change for another video
 
@@ -44,31 +48,32 @@ centers = []
 # to the webcam
 if not args.get("video", False):
     camera = cv2.VideoCapture(0)
-
+    print("using webcam")
 
 # otherwise, grab a reference to the video file
 else:
     camera = cv2.VideoCapture(args["video"])
-# for i in range(50):
+    print("using provided video")
+# for i in range(430):
 #     (grabbed, frame) = camera.read()
 #     cv2.imshow("Frame",frame)
 #     cv2.waitKey(1)
 
-#Initialize time counting
+# Initialize time counting
 
 frameno = -1
 fps = camera.get(cv2.cv.CV_CAP_PROP_FPS)
-print(fps)
+print("fps =", fps)
 # fps = camera.set(cv2.cv.CV_CAP_PROP_FPS,240)
 # keep looping
 while True:
     # grab the current frame
     (grabbed, frame) = camera.read()
-    
+    # print(grabbed)
     # if we are viewing a video and we did not grab a frame,
     # then we have reached the end of the video
     if args.get("video") and not grabbed:
-        with open("BaseMovementUncommon.txt", "wb") as fp:
+        with open(args["picklename"], "wb") as fp:
             pickle.dump(centers, fp)
         # print(centers)
         break
@@ -90,8 +95,8 @@ while True:
         # blobs left in the mask
         kernel = np.ones((6,6),np.uint8)
         mask = cv2.inRange(hsv, lower[key], upper[key])
-        if key == "red":
-            cv2.imshow("Mask",mask)
+        # if key == "yellow":
+        # cv2.imshow(key,mask)
         # waiting = cv2.waitKey() & 0xFF
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
@@ -110,8 +115,11 @@ while True:
                 # it to compute the minimum enclosing circle and
                 # centroid
                 c = max(cnts, key=cv2.contourArea)
+                # print(c)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
                 M = cv2.moments(c)
+                # print(M)
+                # print(frameno)
                 # t = time.clock()
 
                 # only proceed if the radius meets a minimum size. Correct this value for your obect's size
@@ -120,10 +128,10 @@ while True:
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius), colors[key], 2)
                     cv2.putText(frame,key + " ball", (int(x-radius),int(y-radius)), cv2.FONT_HERSHEY_SIMPLEX, 0.6,colors[key],2)
+                    if M["m10"]:
+                        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
-                    center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-                    centers.append([key, center, t])
+                        centers.append([key, center, t])
                     # save centers data in test.txt file
                     # with open("test3.txt", "wb") as fp:
                     #     pickle.dump(centers, fp)
@@ -136,11 +144,12 @@ while True:
     # show the frame to our screen
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
+    # print(frameno)
     if key == ord("s"):
         cv2.imwrite("testframe.png",hsv)
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
-        with open("noescape.txt", "wb") as fp:
+        with open(args["picklename"], "wb") as fp:
             pickle.dump(centers, fp)
         # print(centers)
         break

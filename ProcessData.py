@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("SinglePendWithAndWithout.txt", "r")
+fp =  open("DSC_0004.txt", "r")
 data = pickle.load(fp)
 # print(data)
 
@@ -145,8 +145,8 @@ theta_data2 = calculate_angles(organized_data, 'green', 'red')
 
 # print(theta_data[0])
 fig1 = plt.figure(1)
-plt.plot(theta_data1[0], theta_data1[1], label = 'With Escapement')
-plt.plot(theta_data2[0], theta_data2[1], label = 'Without Escapement')
+plt.plot(theta_data1[0], theta_data1[1], label = 'Yellow Pendulum')
+plt.plot(theta_data2[0], theta_data2[1], label = 'Green Pendulum')
 plt.ylabel("Theta (rad)")
 plt.xlabel('Time (s)')
 plt.title('Double Pendulum')
@@ -167,8 +167,8 @@ plt.title('Cart on Double Pendulum')
 
 plt.show()
 
-with open("singlependsWITHesc1angles.txt", "wb") as fp:
-    pickle.dump(theta_data1, fp)
-    
-with open("singlependWOesc1angles.txt", "wb") as fp:
-    pickle.dump(theta_data2, fp)
+# with open("singlependsWITHesc1angles.txt", "wb") as fp:
+#     pickle.dump(theta_data1, fp)
+# 
+# with open("singlependWOesc1angles.txt", "wb") as fp:
+#     pickle.dump(theta_data2, fp)
