@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # open data
-fp =  open("DSC_0008.txt", "r")
+fp =  open("singlependsWITHesc1angles.txt", "r")
 data = pickle.load(fp)
 # print(data)
 
@@ -97,8 +97,8 @@ def calculate_cart(dist, data, color1,color2):
     y2_list = data[color2]['y']
 
     #Calculate initial cart position in pixels
-    
-    cart_zero_pix = [x1_list[0], y1_list[0]] 
+
+    cart_zero_pix = [x1_list[0], y1_list[0]]
     # initialize the difference measuring vector
     delta = []
 
@@ -122,13 +122,13 @@ def calculate_cart(dist, data, color1,color2):
     #Calculate how many pixels per unit distance between the dots
     pixperdist = avepix/dist
     # print(pixperdist)
-    
+
     #calculate position compared to initial position of cart
     cartrelpix_x=[]
     cartrelpix_y =[]
     cartrelpix_x[:] = [x - cart_zero_pix[0] for x in x1_list]
     cartrelpix_y[:] = [y - cart_zero_pix[1] for y in y1_list]
-    
+
     cart_pos = []
     for relpix in cartrelpix_x:
         k=cartrelpix_x.index(relpix)
@@ -169,6 +169,6 @@ plt.show()
 
 # with open("singlependsWITHesc1angles.txt", "wb") as fp:
 #     pickle.dump(theta_data1, fp)
-# 
+#
 # with open("singlependWOesc1angles.txt", "wb") as fp:
 #     pickle.dump(theta_data2, fp)
